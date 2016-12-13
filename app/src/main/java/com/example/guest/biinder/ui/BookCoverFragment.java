@@ -1,9 +1,7 @@
 package com.example.guest.biinder.ui;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -47,18 +45,23 @@ public class BookCoverFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        String [] bookNames = {"Warscapia" , "Eragon" , "Last Horizon", "Ready Player One"};
+        Random rnd = new Random();
+        int guess = rnd.nextInt(bookNames.length);
+
+        mBookReference = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("allBooks")
+                .child(bookNames[guess]);
+
 //        Bitmap bmp =  BitmapFactory.decodeResource(getResources(),R.drawable.warscapia);//your image
 //        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
 //        bmp.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
 //        bmp.recycle();
 //        byte[] byteArray = bYtE.toByteArray();
 //        final String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
-        mBookReference = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child("allBooks")
-                .child("Warscapia");
+//        mBookReference.child("image").setValue(encodedImage);
 
         mBookReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,6 +78,7 @@ public class BookCoverFragment extends Fragment {
                 byte[] decodedString = Base64.decode(temp.getImage(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 mCoverImage.setImageBitmap(decodedByte);
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -84,11 +88,6 @@ public class BookCoverFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_book_cover, container, false);
         ButterKnife.bind(this,view);
-        Random rnd = new Random();
-        String [] words = {"A","B","C","D","E","F"};
-        int randomNumber = rnd.nextInt(words.length);
-
-        mTestFragmentTextView.setText(words[randomNumber]);
 
         return view;
     }

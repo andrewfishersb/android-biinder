@@ -17,6 +17,7 @@
         android:layout_below="@+id/testFragmentTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:src="@drawable/loadingbar"
         android:id="@+id/coverImage" />
 
 </RelativeLayout>
