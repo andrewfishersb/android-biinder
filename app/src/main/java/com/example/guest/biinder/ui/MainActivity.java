@@ -1,23 +1,28 @@
 package com.example.guest.biinder.ui;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.guest.biinder.R;
+import com.example.guest.biinder.model.Book;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity{
 
     private GestureDetectorCompat mDetector;
     private View myView;
     private boolean change = true;
+    private DatabaseReference mBookReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
         if(myView.getScrollX() < -1000 && change ){
             change = false;
             Log.d("Triggered" , "THIS RAN!");
-            Intent intent = new Intent(MainActivity.this,Test.class);
+            Intent intent = new Intent(MainActivity.this,StatsActivity.class);
             intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             //may cause future problems
@@ -45,7 +50,7 @@ public class MainActivity extends AppCompatActivity{
         else if(myView.getScrollX() > 1000 && change ){
             change = false;
             Log.d("Triggered" , "THIS RAN!");
-            Intent intent = new Intent(MainActivity.this,Test.class);
+            Intent intent = new Intent(MainActivity.this,StatsActivity.class);
             intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             //may cause future problems

@@ -42,4 +42,12 @@ public class Book {
         return dislikes;
     }
 
+    public void addLike() {
+        likes += 1;
+    }
+
+    public void addDislike() {
+        dislikes += 1;
+    }
+
 }
