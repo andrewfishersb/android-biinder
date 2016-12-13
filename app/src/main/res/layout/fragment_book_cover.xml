@@ -1,14 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.guest.biinder.BookCoverFragment">
+    tools:context="com.example.guest.biinder.ui.BookCoverFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/testFragmentTextView"
+        android:text="HELLO"
+        android:textSize="20sp" />
+
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_below="@+id/testFragmentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:src="@drawable/warscapia" />
-</LinearLayout>
+
+</RelativeLayout>

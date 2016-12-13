@@ -37,13 +37,19 @@ public class MainActivity extends AppCompatActivity{
             change = false;
             Log.d("Triggered" , "THIS RAN!");
             Intent intent = new Intent(MainActivity.this,Test.class);
+            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            //may cause future problems
+            finish();
         }
         else if(myView.getScrollX() > 1000 && change ){
             change = false;
             Log.d("Triggered" , "THIS RAN!");
             Intent intent = new Intent(MainActivity.this,Test.class);
+            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            //may cause future problems
+            finish();
         }
 
         return super.onTouchEvent(event);
@@ -66,11 +72,7 @@ public class MainActivity extends AppCompatActivity{
             int velY = (int) (velocityY);
             myView.scrollBy(velX, velY);
             Log.d("View x", Float.toString(myView.getScrollX()));
-            if(myView.getScrollX() < -1000){
-                Intent intent = new Intent(MainActivity.this,Test.class);
 
-                startActivity(intent);
-            }
             return true;
 
         }
