@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "827470993656",
+    "firebase_url": "https://biinder-307b9.firebaseio.com",
+    "project_id": "biinder-307b9",
+    "storage_bucket": "biinder-307b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827470993656:android:d0d8b805815584e4",
+        "android_client_info": {
+          "package_name": "com.example.guest.biinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827470993656-jqc8cu4cr72qqul4h0art39mrsr9jv7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.guest.biinder",
+            "certificate_hash": "7CA83014AE22B68196599147E29A301EC202E1B8"
+          }
+        },
+        {
+          "client_id": "827470993656-e38sgevsd81eu5o3g1p7p88melg4m5p4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEtIECNekk-9qCd9MwiC84LLrVIO0CjWk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827470993656-e38sgevsd81eu5o3g1p7p88melg4m5p4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
