@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity{
 
     private GestureDetectorCompat mDetector;
     private boolean change = true;
+    private boolean stop = false;
     private DatabaseReference mBookReference;
 
     Animation rightAnimation, leftAnimation;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Bind(R.id.coverImage) ImageView mCoverImage;
 
-    private String [] bookNames = {"Warscapia" , "Eragon" , "Last Horizon", "Ready Player One"};
+    private String [] bookNames = {"1338099132","0307887448" , "1535459425" , "1540894983", "B01N2NU4X3", "B01MXFD8BH" , "B01M35IA2M", "B01J4IORWU", "B01N0AVQH6", "B01N6F98LS", "B01M8JW7DQ"};
     Book chosenBook;
 
     @Override
@@ -59,26 +60,24 @@ public class MainActivity extends AppCompatActivity{
 
         //previsouly in fragment
         Random rnd = new Random();
-        int guess = rnd.nextInt(bookNames.length);
+        final int guess = rnd.nextInt(bookNames.length);
 
         mBookReference = FirebaseDatabase
                 .getInstance()
                 .getReference()
                 .child("allBooks")
                 .child(bookNames[guess]);
+        //bookNames[guess]
 
         mBookReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String title = (String) dataSnapshot.child("title").getValue();
-                String author = (String) dataSnapshot.child("author").getValue();
-                String picture = (String) dataSnapshot.child("image").getValue();
-                long wins = (long) dataSnapshot.child("likes").getValue();
-                long losses = (long) dataSnapshot.child("dislikes").getValue();
-                chosenBook = new Book(title, author, picture, wins, losses);
+                long likes = (long) dataSnapshot.child("likes").getValue();
+                long dislikes = (long) dataSnapshot.child("dislikes").getValue();
+                chosenBook = new Book(likes, dislikes);
 
-                Picasso.with(MainActivity.this).load(chosenBook.getImage()).resize(1400 , 2050).into(mCoverImage);
+                Picasso.with(MainActivity.this).load("http://images.amazon.com/images/P/"+bookNames[guess] + ".jpg").resize(1400 , 2050).into(mCoverImage);
 
             }
             @Override
@@ -110,7 +109,8 @@ public class MainActivity extends AppCompatActivity{
                 mBookReference.child("likes").setValue(chosenBook.getLikes());
                 intent.putExtra("likes" , Long.toString(chosenBook.getLikes()));
                 intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
-                intent.putExtra("image", chosenBook.getImage());
+                intent.putExtra("ISBN" , bookNames[guess]);
+
                 startActivity(intent);
             }
 
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity{
                 mBookReference.child("dislikes").setValue(chosenBook.getDislikes());
                 intent.putExtra("likes" , Long.toString(chosenBook.getLikes()));
                 intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
-                intent.putExtra("image", chosenBook.getImage());
+                intent.putExtra("ISBN" , bookNames[guess]);
                 startActivity(intent);
             }
 
@@ -153,12 +153,15 @@ public class MainActivity extends AppCompatActivity{
 
         if(mCoverImage.getScrollX() < -800 && change ){
             change = false;
+            stop = true;
             mCoverImage.startAnimation(rightAnimation);
+
             //may cause future problems
             //finish();
         }
         else if(mCoverImage.getScrollX() > 800 && change ){
             change = false;
+            stop = true;
             mCoverImage.startAnimation(leftAnimation);
             //may cause future problems
             //finish();
@@ -181,7 +184,9 @@ public class MainActivity extends AppCompatActivity{
                                float velocityX, float velocityY) {
             int velX = (int) (velocityX);
             int velY = (int) (velocityY);
-            mCoverImage.scrollBy(velX, velY);
+            if(!stop){
+                mCoverImage.scrollBy(velX, velY);
+            }
 
             return true;
 
@@ -201,11 +206,11 @@ public class MainActivity extends AppCompatActivity{
                     return false;
                 if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    mCoverImage.scrollBy(velX, velY);
+                    //mCoverImage.scrollBy(velX, velY);
 
                 } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    mCoverImage.scrollBy(velX, velY);
+                    //mCoverImage.scrollBy(velX, velY);
                 }
 
 
@@ -217,9 +222,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
-//    public Book getBook(){
-//        return chosenBook;
-//    }
+
 
 
 }

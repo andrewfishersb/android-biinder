@@ -33,8 +33,9 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
 
         mLikeText.setText("Likes:  " + intent.getStringExtra("likes"));
         mDislikeText.setText("Dislikes:  "+intent.getStringExtra("dislikes"));
-        String url = intent.getStringExtra("image");
-        Picasso.with(StatsActivity.this).load(url).resize(1400 , 2050).into(mCover);
+        String isbn = intent.getStringExtra("ISBN");
+
+        Picasso.with(StatsActivity.this).load("http://images.amazon.com/images/P/"+ isbn + ".jpg").resize(1400 , 2050).into(mCover);
 
 
         nextButton.setOnClickListener(this);
