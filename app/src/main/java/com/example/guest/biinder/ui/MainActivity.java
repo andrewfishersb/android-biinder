@@ -1,6 +1,7 @@
 package com.example.guest.biinder.ui;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +18,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import butterknife.Bind;
+
 public class MainActivity extends AppCompatActivity{
 
     private GestureDetectorCompat mDetector;
     private View myView;
     private boolean change = true;
     private DatabaseReference mBookReference;
+    Book aBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +44,19 @@ public class MainActivity extends AppCompatActivity{
 
         if(myView.getScrollX() < -1000 && change ){
             change = false;
-            Log.d("Triggered" , "THIS RAN!");
             Intent intent = new Intent(MainActivity.this,StatsActivity.class);
             intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            aBook.addLike();
             startActivity(intent);
             //may cause future problems
             finish();
         }
         else if(myView.getScrollX() > 1000 && change ){
             change = false;
-            Log.d("Triggered" , "THIS RAN!");
             Intent intent = new Intent(MainActivity.this,StatsActivity.class);
             intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            aBook.addDislike();
+            Log.d("Dislikes",Long.toString(aBook.getDislikes()));
             startActivity(intent);
             //may cause future problems
             finish();
@@ -65,7 +70,6 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         public boolean onDown(MotionEvent event) {
-            Log.d(DEBUG_TAG,"onDown: " + event.toString());
             return true;
         }
 
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity{
             int velX = (int) (velocityX);
             int velY = (int) (velocityY);
             myView.scrollBy(velX, velY);
-            Log.d("View x", Float.toString(myView.getScrollX()));
 
             return true;
 
@@ -85,7 +88,6 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                float velocityY) {
-            Log.i("FLING!", "onFling has been called!");
             final int SWIPE_MIN_DISTANCE = 120;
             final int SWIPE_MAX_OFF_PATH = 250;
             final int SWIPE_THRESHOLD_VELOCITY = 200;
@@ -96,12 +98,10 @@ public class MainActivity extends AppCompatActivity{
                     return false;
                 if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    Log.i("Right!", "Right to Left");
                     myView.scrollBy(velX, velY);
 
                 } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    Log.i("Left!", "Left to Right");
                     myView.scrollBy(velX, velY);
                 }
 
@@ -113,6 +113,10 @@ public class MainActivity extends AppCompatActivity{
         }
 
 
+    }
+
+    public Book getBook(){
+        return aBook;
     }
 
 }
