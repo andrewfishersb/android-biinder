@@ -1,6 +1,7 @@
 package com.example.guest.biinder.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,7 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.dislikeText) TextView mDislikeText;
     @Bind(R.id.likeText) TextView mLikeText;
     @Bind(R.id.statBookImage) ImageView mCover;
-
+    private String isbn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +34,11 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
 
         mLikeText.setText("Likes:  " + intent.getStringExtra("likes"));
         mDislikeText.setText("Dislikes:  "+intent.getStringExtra("dislikes"));
-        String isbn = intent.getStringExtra("ISBN");
+         isbn = intent.getStringExtra("ISBN");
 
         Picasso.with(StatsActivity.this).load("http://images.amazon.com/images/P/"+ isbn + ".jpg").resize(1400 , 2050).into(mCover);
 
-
+        mCover.setOnClickListener(this);
         nextButton.setOnClickListener(this);
     }
 
@@ -48,6 +49,10 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
             Intent intent = new Intent(StatsActivity.this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+        }
+        if(v==mCover){
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.amazon.com/gp/product/"+isbn));
+            startActivity(webIntent);
         }
     }
 
