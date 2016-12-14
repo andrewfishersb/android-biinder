@@ -1,8 +1,11 @@
 package com.example.guest.biinder.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Guest on 12/13/16.
  */
+@Parcel
 public class Book {
 
     String title;
