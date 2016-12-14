@@ -96,6 +96,8 @@ public class MainActivity extends AppCompatActivity{
             intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
             chosenBook.addLike();
             mBookReference.child("likes").setValue(chosenBook.getLikes());
+            intent.putExtra("likes" , Long.toString(chosenBook.getLikes()));
+            intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
             startActivity(intent);
             //may cause future problems
             finish();
@@ -107,6 +109,9 @@ public class MainActivity extends AppCompatActivity{
             chosenBook.addDislike();
             mBookReference.child("dislikes").setValue(chosenBook.getDislikes());
             Log.d("Dislikes",Long.toString(chosenBook.getDislikes()));
+            intent.putExtra("likes" ,Long.toString(chosenBook.getLikes() )) ;
+            intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
+            intent.putExtra("title", chosenBook.getImage());
             startActivity(intent);
             //may cause future problems
             finish();

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.guest.biinder.R;
 
@@ -15,6 +16,8 @@ import butterknife.OnClick;
 public class StatsActivity extends AppCompatActivity implements View.OnClickListener{
 
     @Bind(R.id.nextButton) Button nextButton;
+    @Bind(R.id.dislikeText) TextView mDislikeText;
+    @Bind(R.id.likeText) TextView mLikeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,11 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_stats);
 
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+
+        mLikeText.setText("Likes:  " + intent.getStringExtra("likes"));
+        mDislikeText.setText("Dislikes:  "+intent.getStringExtra("dislikes"));
 
         nextButton.setOnClickListener(this);
     }
