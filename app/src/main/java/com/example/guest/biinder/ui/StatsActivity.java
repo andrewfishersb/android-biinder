@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.guest.biinder.R;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,6 +20,7 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.nextButton) Button nextButton;
     @Bind(R.id.dislikeText) TextView mDislikeText;
     @Bind(R.id.likeText) TextView mLikeText;
+    @Bind(R.id.statBookImage) ImageView mCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,9 @@ public class StatsActivity extends AppCompatActivity implements View.OnClickList
 
         mLikeText.setText("Likes:  " + intent.getStringExtra("likes"));
         mDislikeText.setText("Dislikes:  "+intent.getStringExtra("dislikes"));
+        String url = intent.getStringExtra("image");
+        Picasso.with(StatsActivity.this).load(url).resize(1400 , 2050).into(mCover);
+
 
         nextButton.setOnClickListener(this);
     }

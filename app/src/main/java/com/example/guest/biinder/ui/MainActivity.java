@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity{
     private GestureDetectorCompat mDetector;
     private boolean change = true;
     private DatabaseReference mBookReference;
+
+    Animation rightAnimation, leftAnimation;
 
     Context mContext = getBaseContext();
 
@@ -83,38 +87,81 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        rightAnimation = AnimationUtils.loadAnimation(this, R.anim.move_right);
+        rightAnimation.setFillAfter(true);
+
+        leftAnimation = AnimationUtils.loadAnimation(this, R.anim.move_left);
+        leftAnimation.setFillAfter(true);
+
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+
+        rightAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                change = false;
+                Intent intent = new Intent(MainActivity.this,StatsActivity.class);
+                intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                chosenBook.addLike();
+                mBookReference.child("likes").setValue(chosenBook.getLikes());
+                intent.putExtra("likes" , Long.toString(chosenBook.getLikes()));
+                intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
+                intent.putExtra("image", chosenBook.getImage());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        leftAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                change = false;
+                Intent intent = new Intent(MainActivity.this,StatsActivity.class);
+                intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                chosenBook.addDislike();
+                mBookReference.child("dislikes").setValue(chosenBook.getDislikes());
+                intent.putExtra("likes" , Long.toString(chosenBook.getLikes()));
+                intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
+                intent.putExtra("image", chosenBook.getImage());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
         this.mDetector.onTouchEvent(event);
 
-        if(mCoverImage.getScrollX() < -1000 && change ){
+        if(mCoverImage.getScrollX() < -800 && change ){
             change = false;
-            Intent intent = new Intent(MainActivity.this,StatsActivity.class);
-            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            chosenBook.addLike();
-            mBookReference.child("likes").setValue(chosenBook.getLikes());
-            intent.putExtra("likes" , Long.toString(chosenBook.getLikes()));
-            intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
-            startActivity(intent);
+            mCoverImage.startAnimation(rightAnimation);
             //may cause future problems
-            finish();
+            //finish();
         }
-        else if(mCoverImage.getScrollX() > 1000 && change ){
+        else if(mCoverImage.getScrollX() > 800 && change ){
             change = false;
-            Intent intent = new Intent(MainActivity.this,StatsActivity.class);
-            intent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            chosenBook.addDislike();
-            mBookReference.child("dislikes").setValue(chosenBook.getDislikes());
-            Log.d("Dislikes",Long.toString(chosenBook.getDislikes()));
-            intent.putExtra("likes" ,Long.toString(chosenBook.getLikes() )) ;
-            intent.putExtra("dislikes" , Long.toString(chosenBook.getDislikes() ));
-            intent.putExtra("title", chosenBook.getImage());
-            startActivity(intent);
+            mCoverImage.startAnimation(leftAnimation);
             //may cause future problems
-            finish();
+            //finish();
         }
 
         return super.onTouchEvent(event);
@@ -143,6 +190,7 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                float velocityY) {
+
             final int SWIPE_MIN_DISTANCE = 120;
             final int SWIPE_MAX_OFF_PATH = 250;
             final int SWIPE_THRESHOLD_VELOCITY = 200;
